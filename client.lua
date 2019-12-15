@@ -69,8 +69,6 @@ Citizen.CreateThread(function()
     end
 end)
 
--- Exports
-
 local units = { 'Fahrenheit', 'Celsius' }
 local suffixes = { ' °F', ' °C' }
 
@@ -137,12 +135,6 @@ function getCurrentTemperature(x)
     end
 end
 
-exports('getCurrentTemperature', getCurrentTemperature)
-
-exports('getRawTemperature', function()
-    return current_temp
-end)
-
 -- Command
 
 function drawNotification(text)
@@ -164,4 +156,12 @@ RegisterCommand("temperature", function(source, args)
         update()
         drawNotification('~p~Set unit to ' .. unit)
     end
+end)
+
+-- Exports
+
+exports('getCurrentTemperature', getCurrentTemperature)
+
+exports('getRawTemperature', function()
+    return current_temp
 end)
