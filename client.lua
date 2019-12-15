@@ -30,7 +30,7 @@ local current_config = config['default']
 local current_temp = 0
 
 local weather_refresh_rate = 5000
-local temp_refresh_rate = 1000
+local temp_refresh_rate = 10000
 
 function getCurrentTempParams()
     local current = config[GetPrevWeatherTypeHashName()]
@@ -126,9 +126,9 @@ function getCurrentTemperature(x)
         preference = getCurrentUnit()
     end
 
-    if (preference == 0) then
+    if (preference == 1) then
         return getCurrentTemperatureFahrenheit()
-    elseif (preference == 1) then
+    elseif (preference == 2) then
         return getCurrentTemperatureCelsius()
     else
         return getCurrentTemperatureFahrenheit()
