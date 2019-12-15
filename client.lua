@@ -142,3 +142,7 @@ exports('getCurrentTemperatureCelsius', getCurrentTemperatureCelsius)
 exports('getCurrentTemperatureFahrenheit', getCurrentTemperatureFahrenheit)
 
 exports('getCurrentTemperatureKelvin', getCurrentTemperatureKelvin)
+
+exports('getRawTemperature', function()
+    return current_temp
+end)
