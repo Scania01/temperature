@@ -12,7 +12,18 @@ local b = (math.pi)/12
 local params = {
   --[`WEATHER_NAME`] = [a, c, d], use the backtick string literal as these are converted to hashes automatically (no need for GetHashKey())
     [`EXTRASUNNY`] = {6, -1.9, 24},
-    ['default'] = {3, -1.9, 200}
+    [`CLEAR`] = {3, -1.9, 22},
+    [`OVERCAST`] = {1, -1.9, 20},
+    [`CLOUDS`] = {1, -1.9, 20},
+    [`RAIN`] = {0.9, -1.9, 19},
+    [`CLEARING`] = {2.1, -1.9, 20},
+    [`THUNDER`] = {0.9, -1.9, 19},
+    [`SMOG`] = {0.9, -1.9, 19},
+    [`FOGGY`] = {0.9, -1.9, 19},
+    [`XMAS`] = {2, -1.9, -2},
+    [`SNOWLIGHT`] = {2, -1.9, -2},
+    [`BLIZZARD`] = {2, -1.9, -2},
+    ['default'] = {3, -1.9, 20}
 }
 
 local current_params = params['default']
