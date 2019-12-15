@@ -3,14 +3,14 @@
 -- Temperature pattern is a sine wave
 -- VARIABLES:
 -- a: Amplitude, variance in temp (max temp is a + d, min temp is a - d)  
--- b: Time period, shouldn't change this as it ensures continuity
--- c: Offset
+-- b: Time period, shouldn't change this as it ensures continuity of temperature between days (no sudden jump at midnight)
+-- c: Offset, translates wave left or right, determines when the max and min temperatures occur.
 -- d: Average temp.
 
 local b = (math.pi)/12
 
 local params = {
-  --[`WEATHER_NAME`] = [a, c, d]
+  --[`WEATHER_NAME`] = [a, c, d], use the backtick string literal as these are converted to hashes automatically (no need for GetHashKey())
     [`EXTRASUNNY`] = {6, -1.9, 24},
     ['default'] = {3, -1.9, 200}
 }
@@ -19,7 +19,7 @@ local current_params = params['default']
 local current_temp = 0
 
 local weather_refresh_rate = 5000
-local temp_refresh_rate = 30000
+local temp_refresh_rate = 10000
 
 function getCurrentTempParams()
     local current = params[GetPrevWeatherTypeHashName()]
@@ -50,11 +50,13 @@ Citizen.CreateThread(function()
         x = x + (minutes / 60)
 
         current_temp = temperature(x)
-        Citizen.Trace(current_temp)
+        Citizen.Trace(current_temp .. '\n')
 
         Citizen.Wait(temp_refresh_rate)
     end
 end)
 
 -- Exports
-exports('getCurrentTemperature', temperature())
+exports('getCurrentTemperature', function()
+    return current_temp
+end)
