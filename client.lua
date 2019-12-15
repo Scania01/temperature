@@ -66,11 +66,6 @@ Citizen.CreateThread(function()
     end
 end)
 
--- Helper functions
-function celsiusToFahrenheit(x)
-    return (9/5)*x + 32
-end
-
 -- Exports
 
 local units = { 'Fahrenheit', 'Celsius', 'Kelvin' }
@@ -89,22 +84,46 @@ function getCurrentUnitSuffix()
     return suffixes[getCurrentUnit()]
 end
 
-
--- Temperatures
-function getCurrentTemperatureCelsius()
-    return current_temp
+-- Helper functions
+function celsiusToFahrenheit(x)
+    return (9/5)*x + 32
 end
 
+function round(num)
+    numDecimalPlaces = 1
+    local mult = 10^(numDecimalPlaces or 0)
+    return math.floor(num * mult + 0.5) / mult
+  end
+
+function processOutput(output, unit)
+    local suffix = suffixes[unit]
+    if unit == nil then
+        suffix = getCurrentUnitSuffix()
+    end
+    return round(output) .. suffix
+end
+
+
+-- Temperatures
 function getCurrentTemperatureFahrenheit()
-    return celsiusToFahrenheit(current_temp)
+    return processOutput(celsiusToFahrenheit(current_temp), 1)
+end
+
+function getCurrentTemperatureCelsius()
+    return processOutput(current_temp, 2)
 end
 
 function getCurrentTemperatureKelvin()
-    return current_temp + 273.13
+    return processOutput(current_temp + 273.13, 3)
 end
 
-function getUserPreferredFunction()
-    local preference = getCurrentUnit()
+function getCurrentTemperature(x)
+    if x ~= nil then
+        preference = x
+    else
+        preference = getCurrentUnit()
+    end
+
     if (preference == 0) then
         return getCurrentTemperatureFahrenheit()
     elseif (preference == 1) then
@@ -116,7 +135,7 @@ function getUserPreferredFunction()
     end
 end
 
-exports('getCurrentTemperature', getUserPreferredFunction)
+exports('getCurrentTemperature', getCurrentTemperature)
 
 exports('getCurrentTemperatureCelsius', getCurrentTemperatureCelsius)
 
