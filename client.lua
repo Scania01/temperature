@@ -9,7 +9,7 @@
 
 local b = (math.pi)/12
 
-local params = {
+local config = {
   --[`WEATHER_NAME`] = [a, c, d], use the backtick string literal as these are converted to hashes automatically (no need for GetHashKey())
     [`EXTRASUNNY`] = {6, -1.9, 24},
     [`CLEAR`] = {3, -1.9, 22},
@@ -26,29 +26,29 @@ local params = {
     ['default'] = {3, -1.9, 20}
 }
 
-local current_params = params['default']
+local current_config = config['default']
 local current_temp = 0
 
 local weather_refresh_rate = 5000
 local temp_refresh_rate = 10000
 
 function getCurrentTempParams()
-    local current = params[GetPrevWeatherTypeHashName()]
+    local current = config[GetPrevWeatherTypeHashName()]
     if current == nil then
-        return params['default']
+        return config['default']
     end
-    return params[GetPrevWeatherTypeHashName()]
+    return current
 end
 
 function temperature(x)
-    a, c, d = table.unpack(current_params)
+    a, c, d = table.unpack(current_config)
     return a*(math.sin(b*x+c))+d
 end
 
 -- Weather refresher
 Citizen.CreateThread(function()
     while true do
-        current_params = getCurrentTempParams()
+        current_config = getCurrentTempParams()
         Citizen.Wait(weather_refresh_rate)
     end
 end)
