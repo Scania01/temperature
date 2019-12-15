@@ -1,6 +1,6 @@
 -- Authored by Jam, December 2019
 
--- Temperature pattern is a sine wave
+-- Temperature pattern is a sine wave, this is all configured in celsius, but will output to fahrenheit by default
 -- VARIABLES:
 -- a: Amplitude, variance in temp (max temp is a + d, min temp is a - d)  
 -- b: Time period, shouldn't change this as it ensures continuity of temperature between days (no sudden jump at midnight)
@@ -30,7 +30,7 @@ local current_config = config['default']
 local current_temp = 0
 
 local weather_refresh_rate = 5000
-local temp_refresh_rate = 10000
+local temp_refresh_rate = 1000
 
 function getCurrentTempParams()
     local current = config[GetPrevWeatherTypeHashName()]
@@ -62,12 +62,43 @@ Citizen.CreateThread(function()
 
         current_temp = temperature(x)
         Citizen.Trace(current_temp .. '\n')
-
         Citizen.Wait(temp_refresh_rate)
     end
 end)
 
+-- Helper functions
+function celsiusToFahrenheit(x)
+    return (5/9)*(x-32)
+end
+
 -- Exports
-exports('getCurrentTemperature', function()
+function getCurrentTemperateCelsius()
     return current_temp
-end)
+end
+
+function getCurrentTemperatureFahrenheit()
+    return celsiusToFahrenheit(current_temp)
+end
+
+function getCurrentTemperateKelvin()
+    return current_temp + 273.13
+end
+
+local functions = {
+    getCurrentTemperatureFahrenheit,
+    getCurrentTemperatureCelsius,
+    getCurrentTemperateKelvin
+}
+
+function getUserPreferredFunction()
+    local preference = GetResourceKvpInt('unit')
+    return functions[preference]
+end
+
+exports('getCurrentTemperature', getUserPreferredFunction)
+
+exports('getCurrentTemperatureCelsius', getCurrentTemperateCelsius)
+
+exports('getCurrentTemperatureFahrenheit', getCurrentTemperatureFahrenheit)
+
+exports('getCurrentTemperateKelvin', getCurrentTemperateKelvin)
