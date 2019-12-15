@@ -45,6 +45,14 @@ function temperature(x)
     return a*(math.sin(b*x+c))+d
 end
 
+function update()
+    local x = GetClockHours()
+    local minutes = GetClockMinutes()
+    x = x + (minutes / 60)
+
+    current_temp = temperature(x)
+end
+
 -- Weather refresher
 Citizen.CreateThread(function()
     while true do
@@ -56,20 +64,15 @@ end)
 -- Temperature refresher
 Citizen.CreateThread(function()
     while true do
-        local x = GetClockHours()
-        local minutes = GetClockMinutes()
-        x = x + (minutes / 60)
-
-        current_temp = temperature(x)
-        Citizen.Trace(current_temp .. '\n')
+        update()
         Citizen.Wait(temp_refresh_rate)
     end
 end)
 
 -- Exports
 
-local units = { 'Fahrenheit', 'Celsius', 'Kelvin' }
-local suffixes = { ' °F', ' °C', 'K' }
+local units = { 'Fahrenheit', 'Celsius' }
+local suffixes = { ' °F', ' °C' }
 
 -- Units
 
@@ -118,10 +121,6 @@ function getCurrentTemperatureCelsius()
     return processOutput(current_temp, 2)
 end
 
-function getCurrentTemperatureKelvin()
-    return processOutput(current_temp + 273.13, 3)
-end
-
 function getCurrentTemperature(x)
     if x ~= nil then
         preference = x
@@ -133,8 +132,6 @@ function getCurrentTemperature(x)
         return getCurrentTemperatureFahrenheit()
     elseif (preference == 1) then
         return getCurrentTemperatureCelsius()
-    elseif (preference == 2) then
-        return getCurrentTemperatureKelvin()
     else
         return getCurrentTemperatureFahrenheit()
     end
@@ -145,8 +142,6 @@ exports('getCurrentTemperature', getCurrentTemperature)
 exports('getCurrentTemperatureCelsius', getCurrentTemperatureCelsius)
 
 exports('getCurrentTemperatureFahrenheit', getCurrentTemperatureFahrenheit)
-
-exports('getCurrentTemperatureKelvin', getCurrentTemperatureKelvin)
 
 exports('getRawTemperature', function()
     return current_temp
@@ -162,14 +157,15 @@ end
 
 
 RegisterCommand("temperature", function(source, args)
-    local inputs = { ['F'] = 0, ['C'] = 1, ['K'] = 2 }
+    local inputs = { ['F'] = 0, ['C'] = 1 }
     local unit = args[1]
 
     if inputs[unit] == nil then
-        drawNotification('~r~You must use one of the following: C, F, K')
+        drawNotification('~r~You must use one of the following: C, F')
         return
     else
         setCurrentUnit(inputs[unit])
+        update()
         drawNotification('~p~Set unit to ' .. unit)
     end
 end)
