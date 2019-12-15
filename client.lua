@@ -139,10 +139,6 @@ end
 
 exports('getCurrentTemperature', getCurrentTemperature)
 
-exports('getCurrentTemperatureCelsius', getCurrentTemperatureCelsius)
-
-exports('getCurrentTemperatureFahrenheit', getCurrentTemperatureFahrenheit)
-
 exports('getRawTemperature', function()
     return current_temp
 end)
