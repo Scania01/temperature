@@ -72,6 +72,11 @@ local units = { 'Fahrenheit', 'Celsius', 'Kelvin' }
 local suffixes = { ' °F', ' °C', 'K' }
 
 -- Units
+
+function setCurrentUnit(x)
+    SetResourceKvpInt('unit', x)
+end
+
 function getCurrentUnit()
     return GetResourceKvpInt('unit')
 end
@@ -145,4 +150,26 @@ exports('getCurrentTemperatureKelvin', getCurrentTemperatureKelvin)
 
 exports('getRawTemperature', function()
     return current_temp
+end)
+
+-- Command
+
+function drawNotification(text)
+	SetNotificationTextEntry("STRING")
+	AddTextComponentString(text)
+	DrawNotification(0,1)
+end
+
+
+RegisterCommand("temperature", function(source, args)
+    local inputs = { ['F'] = 0, ['C'] = 1, ['K'] = 2 }
+    local unit = args[1]
+
+    if inputs[unit] == nil then
+        drawNotification('~r~You must use one of the following: C, F, K')
+        return
+    else
+        setCurrentUnit(inputs[unit])
+        drawNotification('~p~Set unit to ' .. unit)
+    end
 end)
