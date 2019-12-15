@@ -7,26 +7,48 @@
 local b = (math.pi)/12
 
 local params = {
-  --['WEATHER_NAME'] = [a, b, c, d]
-    ['EXTRASUNNY'] = {6, -1.9, 24},
-    ['default'] = {3, -1.9, 20}
+  --[`WEATHER_NAME`] = [a, b, c, d]
+    [`EXTRASUNNY`] = {6, -1.9, 24},
+    ['default'] = {3, -1.9, 200}
 }
 
+local current_params = params['default']
+local current_temp = 0
+
+local weather_refresh_rate = 5000
+local temp_refresh_rate = 30000
+
 function getCurrentTempParams()
-    return params['EXTRASUNNY']
+    local current = params[GetPrevWeatherTypeHashName()]
+    if current == nil then
+        return params['default']
+    end
+    return params[GetPrevWeatherTypeHashName()]
 end
 
 function temperature(x)
-    a, c, d = table.unpack(getCurrentTempParams())
+    a, c, d = table.unpack(current_params)
     return a*(math.sin(b*x+c))+d
 end
 
+-- Weather refresher
+Citizen.CreateThread(function()
+    while true do
+        current_params = getCurrentTempParams()
+        Citizen.Wait(weather_refresh_rate)
+    end
+end)
+
+-- Temperature refresher
 Citizen.CreateThread(function()
     while true do
         local x = GetClockHours()
         local minutes = GetClockMinutes()
         x = x + (minutes / 60)
-        Citizen.Trace(temperature(x) .. '\n')
-        Citizen.Wait(5000)
+
+        current_temp = temperature(x)
+        Citizen.Trace(current_temp)
+
+        Citizen.Wait(temp_refresh_rate)
     end
 end)
