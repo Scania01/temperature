@@ -1,4 +1,7 @@
+-- Authored by Jam, December 2019
+
 -- Temperature pattern is a sine wave
+-- VARIABLES:
 -- a: Amplitude, variance in temp (max temp is a + d, min temp is a - d)  
 -- b: Time period, shouldn't change this as it ensures continuity
 -- c: Offset
@@ -7,7 +10,7 @@
 local b = (math.pi)/12
 
 local params = {
-  --[`WEATHER_NAME`] = [a, b, c, d]
+  --[`WEATHER_NAME`] = [a, c, d]
     [`EXTRASUNNY`] = {6, -1.9, 24},
     ['default'] = {3, -1.9, 200}
 }
