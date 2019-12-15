@@ -55,3 +55,6 @@ Citizen.CreateThread(function()
         Citizen.Wait(temp_refresh_rate)
     end
 end)
+
+-- Exports
+exports('getCurrentTemperature', temperature())
