@@ -138,9 +138,9 @@ end
 -- Command
 
 function drawNotification(text)
-	SetNotificationTextEntry("STRING")
-	AddTextComponentString(text)
-	DrawNotification(0,1)
+    SetNotificationTextEntry("STRING")
+    AddTextComponentString(text)
+    DrawNotification(0,1)
 end
 
 
