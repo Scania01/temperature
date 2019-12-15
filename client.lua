@@ -68,11 +68,30 @@ end)
 
 -- Helper functions
 function celsiusToFahrenheit(x)
-    return (5/9)*(x-32)
+    return (9/5)*x + 32
 end
 
 -- Exports
-function getCurrentTemperateCelsius()
+
+local units = { 'Fahrenheit', 'Celsius', 'Kelvin' }
+local suffixes = { ' °F', ' °C', 'K' }
+
+-- Units
+function getCurrentUnit()
+    return GetResourceKvpInt('unit')
+end
+
+function getCurrentUnitName()
+    return units[getCurrentUnit()]
+end
+
+function getCurrentUnitSuffix()
+    return suffixes[getCurrentUnit()]
+end
+
+
+-- Temperatures
+function getCurrentTemperatureCelsius()
     return current_temp
 end
 
@@ -80,25 +99,27 @@ function getCurrentTemperatureFahrenheit()
     return celsiusToFahrenheit(current_temp)
 end
 
-function getCurrentTemperateKelvin()
+function getCurrentTemperatureKelvin()
     return current_temp + 273.13
 end
 
-local functions = {
-    getCurrentTemperatureFahrenheit,
-    getCurrentTemperatureCelsius,
-    getCurrentTemperateKelvin
-}
-
 function getUserPreferredFunction()
-    local preference = GetResourceKvpInt('unit')
-    return functions[preference]
+    local preference = getCurrentUnit()
+    if (preference == 0) then
+        return getCurrentTemperatureFahrenheit()
+    elseif (preference == 1) then
+        return getCurrentTemperatureCelsius()
+    elseif (preference == 2) then
+        return getCurrentTemperatureKelvin()
+    else
+        return getCurrentTemperatureFahrenheit()
+    end
 end
 
 exports('getCurrentTemperature', getUserPreferredFunction)
 
-exports('getCurrentTemperatureCelsius', getCurrentTemperateCelsius)
+exports('getCurrentTemperatureCelsius', getCurrentTemperatureCelsius)
 
 exports('getCurrentTemperatureFahrenheit', getCurrentTemperatureFahrenheit)
 
-exports('getCurrentTemperateKelvin', getCurrentTemperateKelvin)
+exports('getCurrentTemperatureKelvin', getCurrentTemperatureKelvin)
