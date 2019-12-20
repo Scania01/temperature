@@ -2,7 +2,7 @@
 
 -- Temperature pattern is a sine wave, this is all configured in celsius, but will output to fahrenheit by default
 -- VARIABLES:
--- a: Amplitude, variance in temp (max temp is a + d, min temp is a - d)  
+-- a: Amplitude, variance in temp (max temp is d + a, min temp is d - a)  
 -- b: Time period, shouldn't change this as it ensures continuity of temperature between days (no sudden jump at midnight)
 -- c: Offset, translates wave left or right, determines when the max and min temperatures occur.
 -- d: Average temp.
