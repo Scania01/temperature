@@ -79,6 +79,9 @@ function setCurrentUnit(x)
 end
 
 function getCurrentUnit()
+    if GetResourceKvpInt('unit') == 0 then -- Override default
+        setCurrentUnit(1)
+    end
     return GetResourceKvpInt('unit')
 end
 
