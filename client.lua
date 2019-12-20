@@ -145,7 +145,7 @@ end
 
 
 RegisterCommand("temperature", function(source, args)
-    local inputs = { ['F'] = 0, ['C'] = 1 }
+    local inputs = { ['F'] = 1, ['C'] = 2 }
     local unit = args[1]
 
     if inputs[unit] == nil then
