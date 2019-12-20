@@ -162,6 +162,13 @@ end)
 
 exports('getCurrentTemperature', getCurrentTemperature)
 
-exports('getRawTemperature', function()
-    return current_temp
+-- x: F = 1, C = 2
+exports('getRawTemperature', function(x)
+    if x == 1 then
+        return celsiusToFahrenheit(current_temp)
+    elseif x == 2 then
+        return current_temp
+    else
+        return current_temp
+    end
 end)

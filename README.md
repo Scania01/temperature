@@ -17,9 +17,11 @@ This doesn't actually display anything to the user, it just exports functions wh
 
     Returns a rounded temperature with the unit specified after, e.g. `21.2 °C`
 
-* `getRawTemperature()`
+* `getRawTemperature(unit)`
 
-    Returns the raw and live calculated temperature (celsius)
+    **`unit` argument is optional**, celsius by default
+
+    Returns the raw and live calculated temperature.
 
 ### Example
 
